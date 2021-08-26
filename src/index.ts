@@ -21,7 +21,7 @@ if (!process.env.PORT) {
     process.exit(1);
 }
 
-const PORT: number = parseInt(process.env.PORT, 10);
+const PORT: number = parseInt(process.env.PORT, 10) || 8000;
 
 const app = express();
 
@@ -38,6 +38,15 @@ app.use(express.json());
  */
 app.use("/items", itemsRouter);
 
+app.get('/', (req, res) => {
+    if (req.query.name) {
+        res.send(`Hello ${req.query.name}!`)
+    }
+    else {
+        res.send('Hello World!')
+    }
+});
+
 /* Must be mounted after routers */
 app.use(errorHandler);
 
@@ -48,6 +57,6 @@ app.use(notFoundHandler);
  * Server Activation
  */
 
-app.listen(PORT | 8000, () => {
+app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
 });
