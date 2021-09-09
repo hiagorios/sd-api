@@ -1,2 +1,4 @@
 node_modules/
+cet-100/
+build/
 *.env

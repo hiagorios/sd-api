@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev --respawn --pretty --transpile-only src/index.ts",
+    "worker-thread": "tsc && node build/worker/multi-thread-sem-lock.js",
     "prod": "node build/index.js",
     "tsc": "tsc",
     "postinstall": "npm run tsc",
