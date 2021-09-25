@@ -10,6 +10,7 @@ import helmet from "helmet";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
 import { itemsRouter } from "./items/items.router";
+import { coreRouter } from "./core/core.router";
 
 dotenv.config();
 
@@ -38,14 +39,7 @@ app.use(express.json());
  */
 app.use("/items", itemsRouter);
 
-app.get('/', (req, res) => {
-    if (req.query.name) {
-        res.send(`Hello ${req.query.name}!`)
-    }
-    else {
-        res.send('Hello World!')
-    }
-});
+app.use('/', coreRouter);
 
 /* Must be mounted after routers */
 app.use(errorHandler);
