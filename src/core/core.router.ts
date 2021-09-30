@@ -2,11 +2,12 @@
  * Required External Modules and Interfaces
  */
 
-import express, { Request, Response } from "express"
+import express, { Request, Response } from "express";
 import HttpException from "../common/http-exception";
-import { RequestModel } from "../common/request.model";
-import { API } from "./api.interface"
-import * as CoreService from "./core.service"
+import { Peer } from "../peer/peer.interface";
+import * as CoreService from "./core.service";
+import * as PeerService from "../peer/peer.service";
+import { ServerInfo } from "./server-info.interface";
 /**
  * Router Definition
  */
@@ -17,17 +18,38 @@ export const coreRouter = express.Router()
  * Controller Definitions
  */
 
-// POST Resolve
+// GET Info
+coreRouter.get("/info", (req: Request, res: Response) => {
+        const info: ServerInfo = CoreService.getServerInfo()
+        res.status(200).send(info)
+});
 
+// PUT Info
+coreRouter.put("/info", (req: Request, res: Response) => {
+    const info: ServerInfo = req.body
+    if (!info) {
+        throw new HttpException(400, 'New info is required')
+    }
+    try {
+        CoreService.updateServerInfo(info)
+
+        res.status(200).send('Server info updated')
+    } catch (e: any) {
+        throw new HttpException(400, e.message)
+    }
+});
+
+
+// POST Resolver
 coreRouter.post("/resolver", (req: Request, res: Response) => {
-    const name = (req.body as RequestModel)?.arguments.nome
-    if (typeof name != 'string') {
+    const name: string = req.body?.arguments.nome
+    if (!name) {
         throw new HttpException(422, 'Name is required')
     }
     try {
-        const api: API = CoreService.findByFirstName(name)
+        const peer: Peer = PeerService.findByFirstName(name)
 
-        res.status(200).send(api)
+        res.status(200).send(peer)
     } catch (e: any) {
         throw new HttpException(404, e.message)
     }

@@ -7,9 +7,9 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 
-import { errorHandler } from "./middleware/error.middleware";
-import { notFoundHandler } from "./middleware/not-found.middleware";
-import { itemsRouter } from "./items/items.router";
+import { errorHandler } from "./common/middleware/error.middleware";
+import { notFoundHandler } from "./common/middleware/not-found.middleware";
+import { peerRouter } from "./peer/peer.router";
 import { coreRouter } from "./core/core.router";
 
 dotenv.config();
@@ -37,7 +37,7 @@ app.use(express.json());
 /**
  *  Routers
  */
-app.use("/items", itemsRouter);
+app.use("/peers", peerRouter);
 
 app.use('/', coreRouter);
 
