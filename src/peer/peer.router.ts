@@ -3,7 +3,7 @@
  */
 
 import express, { Request, Response } from "express";
-import HttpException from "../common/http-exception";
+import ApiException from "../common/model/api-exception";
 import { Peer } from "./peer.interface";
 import * as PeerService from "./peer.service";
 /**
@@ -29,7 +29,7 @@ peerRouter.get("/:id", (req: Request, res: Response) => {
         const peer = PeerService.getPeerByID(id)
         res.status(200).send(peer)
     } catch (e: any) {
-        throw new HttpException(404, e.message)
+        throw new ApiException(404, e.message)
     }
 });
 
@@ -37,14 +37,14 @@ peerRouter.get("/:id", (req: Request, res: Response) => {
 peerRouter.post("/", (req: Request, res: Response) => {
     const newPeer = req.body
     if (!newPeer) {
-        throw new HttpException(400, 'New peer is required')
+        throw new ApiException(400, 'New peer is required')
     }
     try {
         PeerService.addPeer(newPeer)
 
         res.status(200).send('Peer added')
     } catch (e: any) {
-        throw new HttpException(409, e.message)
+        throw new ApiException(409, e.message)
     }
 });
 
@@ -52,7 +52,7 @@ peerRouter.post("/", (req: Request, res: Response) => {
 peerRouter.put("/:id", (req: Request, res: Response) => {
     const updatedPeer: Peer = req.body
     if (!updatedPeer) {
-        throw new HttpException(400, 'Updated peer is required')
+        throw new ApiException(400, 'Updated peer is required')
     }
     updatedPeer.id = req.params.id
     try {
@@ -60,7 +60,7 @@ peerRouter.put("/:id", (req: Request, res: Response) => {
 
         res.status(200).send(peer)
     } catch (e: any) {
-        throw new HttpException(404, e.message)
+        throw new ApiException(404, e.message)
     }
 });
 
@@ -71,6 +71,6 @@ peerRouter.delete("/:id", (req: Request, res: Response) => {
         PeerService.deletePeer(id)
         res.status(200).send('Peer deleted')
     } catch (e: any) {
-        throw new HttpException(404, e.message)
+        throw new ApiException(404, e.message)
     }
 });

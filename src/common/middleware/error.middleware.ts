@@ -1,12 +1,17 @@
-import HttpException from "../http-exception";
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
+import * as CoreService from "../../core/core.service";
+import ApiException from "../model/api-exception";
+import { ErrorResponse } from "../model/error-response";
 
 export const errorHandler = (
-    error: HttpException,
+    error: ApiException,
     request: Request,
     response: Response,
     next: NextFunction
 ) => {
-    const status = error.statusCode || 500;
-    response.status(status).send(error);
+    const errorResponse: ErrorResponse = {
+        apiVersion: CoreService.getApiVersion(),
+        error
+    }
+    response.status(error.code).send(errorResponse);
 };

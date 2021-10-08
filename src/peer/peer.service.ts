@@ -121,7 +121,7 @@ const peers: Peer[] = [
     {
         id: '201710396',
         nome: 'Robert Morais Santos Broketa',
-        url: '/'
+        url: 'https://pratica-sd.herokuapp.com/'
     },
     {
         id: '201720308',

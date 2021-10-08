@@ -3,11 +3,14 @@
  */
 
 import express, { Request, Response } from "express";
-import HttpException from "../common/http-exception";
+import { checkSchema, validationResult } from 'express-validator';
+import ApiException from "../common/model/api-exception";
 import { Peer } from "../peer/peer.interface";
-import * as CoreService from "./core.service";
 import * as PeerService from "../peer/peer.service";
-import { ServerInfo } from "./server-info.interface";
+import * as CoreService from "./core.service";
+import { ServerInfo } from "./schema/server-info.interface";
+import serverInfoSchema from "./schema/server-info.schema";
+
 /**
  * Router Definition
  */
@@ -25,32 +28,29 @@ coreRouter.get("/info", (req: Request, res: Response) => {
 });
 
 // PUT Info
-coreRouter.put("/info", (req: Request, res: Response) => {
+coreRouter.put("/info", checkSchema(serverInfoSchema), (req: Request, res: Response) => {
     const info: ServerInfo = req.body
-    if (!info) {
-        throw new HttpException(400, 'New info is required')
-    }
-    try {
-        CoreService.updateServerInfo(info)
 
-        res.status(200).send('Server info updated')
-    } catch (e: any) {
-        throw new HttpException(400, e.message)
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        throw ApiException.fromValidation(errors.array())
     }
+
+    CoreService.updateServerInfo(info)
+    res.status(200).send('Server info updated')
 });
-
 
 // POST Resolver
 coreRouter.post("/resolver", (req: Request, res: Response) => {
     const name: string = req.body?.arguments.nome
     if (!name) {
-        throw new HttpException(422, 'Name is required')
+        throw new ApiException(422, 'Name is required')
     }
     try {
         const peer: Peer = PeerService.findByFirstName(name)
 
         res.status(200).send(peer)
     } catch (e: any) {
-        throw new HttpException(404, e.message)
+        throw new ApiException(404, e.message)
     }
 });
