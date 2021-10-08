@@ -13,5 +13,5 @@ export const errorHandler = (
         apiVersion: CoreService.getApiVersion(),
         error
     }
-    response.status(error.code).send(errorResponse);
+    response.status(error.code).send(errorResponse)
 };

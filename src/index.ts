@@ -2,15 +2,15 @@
  * Required External Modules
  */
 
+import cors from "cors";
 import * as dotenv from "dotenv";
 import express from "express";
-import cors from "cors";
 import helmet from "helmet";
-
-import { errorHandler } from "./common/middleware/error.middleware";
+import { errorHandler } from "./common/middleware/error-handler.middleware";
+import { errorLogger } from "./common/middleware/error-logger.middleware";
 import { notFoundHandler } from "./common/middleware/not-found.middleware";
-import { peerRouter } from "./peer/peer.router";
 import { coreRouter } from "./core/core.router";
+import { peerRouter } from "./peer/peer.router";
 
 dotenv.config();
 
@@ -42,6 +42,7 @@ app.use("/peers", peerRouter);
 app.use('/', coreRouter);
 
 /* Must be mounted after routers */
+app.use(errorLogger);
 app.use(errorHandler);
 
 /* Must be mounted after all */

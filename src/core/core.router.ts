@@ -3,8 +3,9 @@
  */
 
 import express, { Request, Response } from "express";
-import { checkSchema, validationResult } from 'express-validator';
+import { checkSchema } from 'express-validator';
 import ApiException from "../common/model/api-exception";
+import { validate } from "../common/middleware/validate.middleware";
 import { Peer } from "../peer/peer.interface";
 import * as PeerService from "../peer/peer.service";
 import * as CoreService from "./core.service";
@@ -23,22 +24,19 @@ export const coreRouter = express.Router()
 
 // GET Info
 coreRouter.get("/info", (req: Request, res: Response) => {
-        const info: ServerInfo = CoreService.getServerInfo()
-        res.status(200).send(info)
+    const info: ServerInfo = CoreService.getServerInfo()
+    res.status(200).send(info)
 });
 
 // PUT Info
-coreRouter.put("/info", checkSchema(serverInfoSchema), (req: Request, res: Response) => {
-    const info: ServerInfo = req.body
+coreRouter.put("/info",
+    validate(checkSchema(serverInfoSchema)),
+    async (req: Request, res: Response) => {
+        const info: ServerInfo = req.body
 
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        throw ApiException.fromValidation(errors.array())
-    }
-
-    CoreService.updateServerInfo(info)
-    res.status(200).send('Server info updated')
-});
+        CoreService.updateServerInfo(info)
+        res.status(200).send('Server info updated')
+    });
 
 // POST Resolver
 coreRouter.post("/resolver", (req: Request, res: Response) => {

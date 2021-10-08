@@ -5,6 +5,7 @@ const serverInfoSchema: Schema = {
     server_name: {
         in: ['body'],
         notEmpty: {
+            options: { ignore_whitespace: true },
             errorMessage: 'server_name is required',
             bail: true
         },
@@ -15,6 +16,7 @@ const serverInfoSchema: Schema = {
     server_endpoint: {
         in: ['body'],
         notEmpty: {
+            options: { ignore_whitespace: true },
             errorMessage: 'server_endpoint is required',
             bail: true
         },
@@ -24,6 +26,7 @@ const serverInfoSchema: Schema = {
     descricao: {
         in: ['body'],
         notEmpty: {
+            options: { ignore_whitespace: true },
             errorMessage: 'descricao is required',
             bail: true
         },
@@ -34,6 +37,7 @@ const serverInfoSchema: Schema = {
     versao: {
         in: ['body'],
         notEmpty: {
+            options: { ignore_whitespace: true },
             errorMessage: 'versao is required',
             bail: true
         },
@@ -44,6 +48,7 @@ const serverInfoSchema: Schema = {
     status: {
         in: ['body'],
         notEmpty: {
+            options: { ignore_whitespace: true },
             errorMessage: 'status is required',
             bail: true
         },
@@ -57,6 +62,7 @@ const serverInfoSchema: Schema = {
     tipo_de_eleicao_ativa: {
         in: ['body'],
         notEmpty: {
+            options: { ignore_whitespace: true },
             errorMessage: 'tipo_de_eleicao_ativa is required',
             bail: true
         },
