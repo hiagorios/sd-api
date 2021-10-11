@@ -15,7 +15,7 @@ export default class ApiException extends Error {
 
     static fromValidation(errors: ValidationError[]): Partial<ApiException> {
         return {
-            code: 409,
+            code: 400,
             message: 'Validation failed',
             errors: errors.map(error => {
                 return {
