@@ -3,3 +3,4 @@ cet-100/
 build/
 *.env
 sd.http
+.vscode/

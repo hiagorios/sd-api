@@ -3,7 +3,7 @@
  */
 
 import express, { Request, Response } from "express";
-import { checkSchema } from 'express-validator';
+import { check, checkSchema } from 'express-validator';
 import ApiException from "../common/model/api-exception";
 import { validate } from "../common/middleware/validate.middleware";
 import { Peer } from "../peer/peer.interface";
@@ -39,12 +39,11 @@ coreRouter.put("/info",
     });
 
 // POST Resolver
-coreRouter.post("/resolver", (req: Request, res: Response) => {
-    const name: string = req.body?.arguments.nome
-    if (!name) {
-        throw new ApiException(422, 'Name is required')
-    }
+coreRouter.post("/resolver", 
+    validate([check('arguments.nome').isString()]),
+    (req: Request, res: Response) => {
     try {
+        const name: string = req.body.arguments.nome
         const peer: Peer = PeerService.findByFirstName(name)
 
         res.status(200).send(peer)
