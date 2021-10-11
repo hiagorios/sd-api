@@ -3,9 +3,12 @@
  */
 
 import express, { Request, Response } from "express";
+import { checkSchema } from "express-validator";
+import { validate } from "../common/middleware/validate.middleware";
 import ApiException from "../common/model/api-exception";
 import { Peer } from "./peer.interface";
 import * as PeerService from "./peer.service";
+import peerSchema from "./schema/peer.schema";
 /**
  * Router Definition
  */
@@ -34,35 +37,34 @@ peerRouter.get("/:id", (req: Request, res: Response) => {
 });
 
 // POST Peers
-peerRouter.post("/", (req: Request, res: Response) => {
-    const newPeer = req.body
-    if (!newPeer) {
-        throw new ApiException(400, 'New peer is required')
-    }
-    try {
-        PeerService.addPeer(newPeer)
+peerRouter.post("/",
+    validate(checkSchema(peerSchema)),
+    (req: Request, res: Response) => {
+        try {
+            const newPeer = req.body
+            PeerService.addPeer(newPeer)
 
-        res.status(200).send('Peer added')
-    } catch (e: any) {
-        throw new ApiException(409, e.message)
-    }
-});
+            res.status(200).send('Peer added')
+        } catch (e: any) {
+            throw new ApiException(409, e.message)
+        }
+    });
 
 // PUT Peers
-peerRouter.put("/:id", (req: Request, res: Response) => {
-    const updatedPeer: Peer = req.body
-    if (!updatedPeer) {
-        throw new ApiException(400, 'Updated peer is required')
-    }
-    updatedPeer.id = req.params.id
-    try {
-        const peer = PeerService.updatePeer(updatedPeer)
+peerRouter.put("/:id",
+    validate(checkSchema(peerSchema)),
+    (req: Request, res: Response) => {
+        try {
+            const updatedPeer: Peer = req.body
+            updatedPeer.id = req.params.id
 
-        res.status(200).send(peer)
-    } catch (e: any) {
-        throw new ApiException(404, e.message)
-    }
-});
+            const peer = PeerService.updatePeer(updatedPeer)
+
+            res.status(200).send(peer)
+        } catch (e: any) {
+            throw new ApiException(404, e.message)
+        }
+    });
 
 // DELETE Peers
 peerRouter.delete("/:id", (req: Request, res: Response) => {
