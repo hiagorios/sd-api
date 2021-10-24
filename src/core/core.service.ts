@@ -21,10 +21,10 @@ export const updateServerInfo = (info: ServerInfo) => {
  */
 
 let serverInfo: ServerInfo = {
-    server_name: "Hiago Rios Cordeiro",
-    server_endpoint: "https://sd-api-uesc.herokuapp.com/",
-    descricao: "Projeto de SD. Os seguintes serviços estão implementados, ... etc",
-    versao: "0.1",
-    status: "online",
-    tipo_de_eleicao_ativa: "ring"
+    server_name: 'Hiago Rios Cordeiro',
+    server_endpoint: 'https://sd-api-uesc.herokuapp.com/',
+    descricao: 'Projeto de SD. Os seguintes serviços estão implementados, ... etc',
+    versao: '0.1',
+    status: 'online',
+    tipo_de_eleicao_ativa: 'ring'
 }

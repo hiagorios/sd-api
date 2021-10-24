@@ -4,8 +4,8 @@
 
 import express, { Request, Response } from "express";
 import { check, checkSchema } from 'express-validator';
-import ApiException from "../common/model/api-exception";
 import { validate } from "../common/middleware/validate.middleware";
+import ApiException from "../common/model/api-exception";
 import { Peer } from "../peer/peer.interface";
 import * as PeerService from "../peer/peer.service";
 import * as CoreService from "./core.service";
@@ -39,15 +39,15 @@ coreRouter.put("/info",
     });
 
 // POST Resolver
-coreRouter.post("/resolver", 
+coreRouter.post("/resolver",
     validate([check('arguments.nome').isString()]),
     (req: Request, res: Response) => {
-    try {
-        const name: string = req.body.arguments.nome
-        const peer: Peer = PeerService.findByFirstName(name)
+        try {
+            const name: string = req.body.arguments.nome
+            const peer: Peer = PeerService.findByFirstName(name)
 
-        res.status(200).send(peer)
-    } catch (e: any) {
-        throw new ApiException(404, e.message)
-    }
-});
+            res.status(200).send(peer)
+        } catch (e: any) {
+            throw new ApiException(404, e.message)
+        }
+    });

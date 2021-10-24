@@ -4,14 +4,16 @@ import ApiException from "../model/api-exception";
 import { ErrorResponse } from "../model/error-response";
 
 export const errorHandler = (
-    error: ApiException,
+    exception: ApiException,
     request: Request,
     response: Response,
     next: NextFunction
 ) => {
+    const msg = exception.message
     const errorResponse: ErrorResponse = {
         apiVersion: CoreService.getApiVersion(),
-        error
+        // error.message is not serialized directly
+        error: { ...exception, message: exception.message }
     }
-    response.status(error.code).send(errorResponse)
+    response.status(exception.code).send(errorResponse)
 };

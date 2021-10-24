@@ -11,6 +11,7 @@ import { errorLogger } from "./common/middleware/error-logger.middleware";
 import { notFoundHandler } from "./common/middleware/not-found.middleware";
 import { coreRouter } from "./core/core.router";
 import { peerRouter } from "./peer/peer.router";
+import { resourceRouter } from "./resource/resource.router";
 
 dotenv.config();
 
@@ -38,6 +39,8 @@ app.use(express.json());
  *  Routers
  */
 app.use("/peers", peerRouter);
+
+app.use("/recurso", resourceRouter);
 
 app.use('/', coreRouter);
 
