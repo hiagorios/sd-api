@@ -23,7 +23,7 @@ export const lockResource = () => {
 
     resource.token = uuid()
     resource.expiration = new Date()
-    resource.expiration.setSeconds(resource.expiration.getSeconds() + 15)
+    resource.expiration.setSeconds(resource.expiration.getSeconds() + 10)
 
     return {
         codigo_de_acesso: resource.token,
