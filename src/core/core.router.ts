@@ -4,11 +4,14 @@
 
 import express, { Request, Response } from "express";
 import { check, checkSchema } from 'express-validator';
+import { offlineHandler } from "../common/middleware/offline.middleware";
 import { validate } from "../common/middleware/validate.middleware";
 import ApiException from "../common/model/api-exception";
 import { Peer } from "../peer/peer.interface";
 import * as PeerService from "../peer/peer.service";
 import * as CoreService from "./core.service";
+import { CoordinatorInfo } from "./schema/coordinator-info.interface";
+import { ElectionInfo } from "./schema/election-info.interface";
 import { ServerInfo } from "./schema/server-info.interface";
 import serverInfoSchema from "./schema/server-info.schema";
 
@@ -50,4 +53,60 @@ coreRouter.post("/resolver",
         } catch (e: any) {
             throw new ApiException(404, e.message)
         }
+    });
+
+// GET Coordenador
+coreRouter.get("/coordenador", 
+    offlineHandler(),
+    (req: Request, res: Response) => {
+    const coordinator: CoordinatorInfo = CoreService.getCoordinatorInfo()
+    res.status(200).send(coordinator)
+});
+
+// GET Eleicao
+coreRouter.get("/eleicao", 
+    offlineHandler(),
+    (req: Request, res: Response) => {
+    const info: ElectionInfo = CoreService.getElectionInfo()
+    res.status(200).send(info)
+});
+
+// POST Eleicao
+coreRouter.post("/eleicao",
+    offlineHandler(),
+    validate([
+        check('id').isString(),
+        check('dados').isArray()
+    ]),
+    (req: Request, res: Response) => {
+        const electionId: string = req.body.id
+        const electionData: string[] = req.body.dados
+        CoreService.receiveElection(electionId, electionData)
+
+        res.status(200).send('OK')
+    });
+
+// POST Eleicao
+coreRouter.post("/eleicao/coordenador",
+    offlineHandler(),
+    validate([
+        check('coordenador').isString(),
+        check('id_eleicao').isString()
+    ]),
+    (req: Request, res: Response) => {
+        try {
+            const coordinatorId: string = req.body.coordenador
+            const electionId: string = req.body.id_eleicao
+            CoreService.endElection(electionId, coordinatorId, false)
+            res.status(200).send('OK')
+        } catch (e: any) {
+            throw new ApiException(404, e.message)
+        }
+    });
+
+// POST Eleicao
+coreRouter.post("/eleicao/reset",
+    (req: Request, res: Response) => {
+        CoreService.resetCoodinator()
+        res.status(200).send('OK')
     });

@@ -6,5 +6,5 @@ export interface ServerInfo {
     descricao: string
     versao: string
     status: ServerStatus
-    tipo_de_eleicao_ativa: string
+    tipo_de_eleicao_ativa: 'anel' | 'valentao'
 }

@@ -66,15 +66,12 @@ const serverInfoSchema: Schema = {
             errorMessage: 'tipo_de_eleicao_ativa is required',
             bail: true
         },
-        isString: {
-            errorMessage: 'tipo_de_eleicao_ativa must be a string'
+        custom: {
+            options: (value: string, _) => {
+                return value == 'anel' || value == 'valentao'
+            },
+            errorMessage: 'tipo_de_eleicao_ativa must be ring or other',
         }
-        // custom: {
-        //     options: (value: TipoEleicao', _) => {
-        //         return value == 'ring' || value == 'other'
-        //     },
-        //     errorMessage: 'tipo_de_eleicao_ativa must be ring or other',
-        // }
     }
 }
 
